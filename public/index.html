@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharp Dominant Colour</title>
+</head>
+<body>
+    <div id="imageContainer"></div>
+    <div id="colourContainer"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            const imageContainer = document.getElementById('imageContainer')
+            const colourContainer = document.getElementById('colourContainer')
+
+            const colours = await fetch(`/dominantColourFromFiles`)
+                .then(response => response.json())
+                .then(data => {
+                    const [images, colours] = data
+
+                    for (const image of images) {
+                        const img = document.createElement("img")
+                        
+                        img.style.width = "100px"
+                        img.style.height = "100px"
+                        img.src = `../images/${image}`
+
+                        imageContainer.append(img)
+                    }
+
+                    for (const colour of colours) {
+                        const {r, g, b} = colour
+                        const box = document.createElement("div")
+
+                        box.style.display = "inline-block"
+                        box.style.width = "100px"
+                        box.style.height = "100px"
+                        box.style.backgroundColor = `rgb(${r}, ${g}, ${b})`
+
+                        colourContainer.append(box)
+                    }
+                });
+        });
+    </script>
+</body>
+</html>
